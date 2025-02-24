@@ -2,11 +2,14 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../../models/User");
 const nodemailer = require("nodemailer");
+require('dotenv').config()
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "testemail23mca20049@gmail.com",
-    pass: "uizq ljuv sqvg hkqv",
+    // user: "testemail23mca20049@gmail.com",
+    // pass: "uizq ljuv sqvg hkqv",
+    user:process.env.EMAIL,
+    pass:process.env.NODEMAILER_PASSWORD
   },
 });
 
@@ -109,7 +112,7 @@ const loginUser = async (req, res) => {
         email: checkUser.email,
         userName: checkUser.userName,
       },
-      "CLIENT_SECRET_KEY",
+      process.env.JWT_SECRET,
       { expiresIn: "60m" }
     );
 
@@ -151,7 +154,7 @@ const authMiddleware = async (req, res, next) => {
     });
 
   try {
-    const decoded = jwt.verify(token, "CLIENT_SECRET_KEY");
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded;
     next();
   } catch (error) {

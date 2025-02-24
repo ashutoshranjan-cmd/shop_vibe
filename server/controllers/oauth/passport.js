@@ -47,6 +47,7 @@ const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const jwt = require("jsonwebtoken");
 const User = require("../../models/User");
+require('dotenv').config()
 
 passport.use(
   new GoogleStrategy(
@@ -74,7 +75,7 @@ passport.use(
             email: user.email,
             userName: user.userName,
           },
-          "CLIENT_SECRET_KEY",
+          process.env.JWT_SECRET,
           { expiresIn: "60m" }
         );
 
